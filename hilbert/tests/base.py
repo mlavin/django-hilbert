@@ -1,16 +1,22 @@
 """
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
+Base test cases for Django-Hilbert.
 """
 
+from django.contrib.auth import models as auth
 from django.test import TestCase
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class HilbertBaseTestCase(TestCase):
+    urls = 'hilbert.tests.urls'
+    username = 'hilbert'
+    password = 'test'
+
+    def create_user(self, data=None):
+        data = data or {}
+        defaults = {
+            'username': self.username,
+            'email': 'hilbert@example.com',
+            'password': self.password,
+        }
+        defaults.update(data)
+        return auth.User.objects.create_user(**defaults)
