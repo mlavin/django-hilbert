@@ -29,3 +29,15 @@ people from writing it over and over again. This project is not meant to be a
 replacement for djangosnippets but more a supplement to maintain my personal
 sanity.
 
+
+Related Projects
+-----------------------------------
+
+There are some similar projects. If interested you should check out:
+
+1. `django-annoying <https://bitbucket.org/offline/django-annoying>`_
+2. `djblets <https://github.com/djblets/djblets>`_
+3. `django-utils <https://github.com/ojii/django-utils>`_
+
+I appologize in advance if you felt I've left out a project.
+
