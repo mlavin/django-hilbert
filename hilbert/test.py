@@ -78,7 +78,10 @@ class CoverageRunner(DjangoTestSuiteRunner):
         app_module = __import__('.'.join(app_path), globals(), locals(), app_path[-1])
         modules = [app_module]
         for module_name in settings.COVERAGE_MODULES:
-            module = getattr(app_module, module_name, None)
+            try:
+                module = __import__('.'.join(app_path + [module_name]), {}, {}, module_name)
+            except ImportError:
+                module = None
             if ismodule(module):
                 modules.append(module)
         return modules
