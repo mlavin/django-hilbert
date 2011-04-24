@@ -19,6 +19,7 @@ from django.test.simple import DjangoTestSuiteRunner
 __all__ = (
     'Client',
     'TestCase',
+    'CoverageRunner',
     'ViewTestMixin',
     'AuthViewMixin',
 )
