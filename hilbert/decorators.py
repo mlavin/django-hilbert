@@ -4,10 +4,6 @@ from django import http
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import available_attrs
-from django.utils.log import getLogger
-
-
-logger = getLogger('django-hilbert')
 
 
 def ajax_login_required(view_func):
@@ -32,6 +28,5 @@ def ajax_only(view_func):
         if request.is_ajax():
             return view_func(request, *args, **kwargs)
         else:
-            logger.warning(u'AJAX required: %s' % request.path, extra={'request': request})
             return http.HttpResponseBadRequest()
     return _wrapped_view
