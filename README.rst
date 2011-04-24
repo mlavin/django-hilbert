@@ -19,3 +19,6 @@ Optional (but recommended)
 The jQuery library is not included in the distribution but should be included
 in your templates.
 
+To use the `CoverageRunner` you need to install Ned Batchelder's
+`coverage.py <http://nedbatchelder.com/code/modules/coverage.html>`_.
+
