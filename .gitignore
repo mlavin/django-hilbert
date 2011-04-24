@@ -1,0 +1,10 @@
+*.py[co]
+.project
+.pydevproject
+*~
+*.db
+*.orig
+docs/_build/*
+docs/_static/*
+dist/*
+*.egg-info/*
