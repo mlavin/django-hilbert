@@ -35,13 +35,13 @@ class AjaxLoginRequiredTestCase(HilbertBaseTestCase):
         Ajax requests should return custom headers to indicate login is required.
         """
 
-        response = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, is_ajax=True)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response['X-Django-Requires-Auth'])
         self.assertEqual(response['X-Django-Login-Url'], settings.LOGIN_URL)
 
         self.client.login(username=self.username, password=self.password)
-        response = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, is_ajax=True)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('X-Django-Requires-Auth' not in response)
         self.assertTrue('X-Django-Login-Url' not in response)
@@ -66,5 +66,5 @@ class AjaxOnlyTestCase(HilbertBaseTestCase):
         Ajax requests will get 200 status.
         """
 
-        response = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, is_ajax=True)
         self.assertEqual(response.status_code, 200)

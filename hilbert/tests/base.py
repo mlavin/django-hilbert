@@ -3,7 +3,8 @@ Base test cases for Django-Hilbert.
 """
 
 from django.contrib.auth import models as auth
-from django.test import TestCase
+
+from hilbert.test import TestCase
 
 
 class HilbertBaseTestCase(TestCase):
@@ -15,8 +16,7 @@ class HilbertBaseTestCase(TestCase):
         data = data or {}
         defaults = {
             'username': self.username,
-            'email': 'hilbert@example.com',
             'password': self.password,
         }
         defaults.update(data)
-        return auth.User.objects.create_user(**defaults)
+        return super(HilbertBaseTestCase, self).create_user(defaults)
