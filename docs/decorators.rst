@@ -16,9 +16,41 @@ This is based on answers from the Stackoverflow question
 `"How to manage a redirect request after a JQuery Ajax call?" <http://stackoverflow.com/questions/199099/>`_.
 
 
+.. code-block:: python
+
+    @ajax_login_required
+    def authenticated_view(request):
+        return HttpResponse()
+
+
 ajax_only
 --------------------------------------
 
 The `ajax_only` decorator ensures that all requests made to a particular view are
 made as AJAX requests. Non-AJAX requests will recieve a 400 (Bad Request) response.
 This is based on `snippet 771 <http://djangosnippets.org/snippets/771/>`_.
+
+
+.. code-block:: python
+
+    @ajax_only
+    def ajax_view(request):
+        return HttpResponse()
+
+
+anonymous_required
+--------------------------------------
+
+.. versionadded:: 0.2
+
+This decorator is the opposite of `login_required`. It ensures that users attempting
+to view this page are not authenticated. By default this will redirect autheticated users
+to the server root '/' or you can specify another url as either an absolute path or as
+as named url pattern.
+
+.. code-block:: python
+
+    @anonymous_required(url='/hilbert/test/simple/')
+    def anonymous_only_view(request):
+        return HttpResponse()
+

@@ -3,10 +3,13 @@ from functools import wraps
 from django import http
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django.utils.decorators import available_attrs
 
 
 def ajax_login_required(view_func):
+    """Handle non-authenticated users differently if it is an AJAX request."""
+
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         if request.is_ajax():
@@ -23,6 +26,8 @@ def ajax_login_required(view_func):
 
 
 def ajax_only(view_func):
+    """Required the view is only accessed via AJAX."""
+
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         if request.is_ajax():
@@ -30,3 +35,23 @@ def ajax_only(view_func):
         else:
             return http.HttpResponseBadRequest()
     return _wrapped_view
+
+
+def anonymous_required(func=None, url=None):
+    """Required that the user is not logged in."""
+
+    url = url or "/"
+
+    def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
+        def _wrapped_view(request, *args, **kwargs):
+            if request.user.is_authenticated():
+                return redirect(url)
+            else:
+                return view_func(request, *args, **kwargs)
+        return _wrapped_view
+
+    if func is None:
+        return _dec
+    else:
+        return _dec(func)
