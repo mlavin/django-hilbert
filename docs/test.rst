@@ -5,7 +5,7 @@ The test module defines a new test client, base testcase, testing mixins, and
 an alternate test runner.
 
 
-New Test Client
+TestClient
 --------------------------------------
 
 `hilbert.test.Client` is a simple extension of the Django test client which allows
@@ -13,7 +13,7 @@ for an extra argument in `get` and `post` called `is_ajax`. This will default to
 `False` but when passed as `True` it will make the request as an AJAX request.
 
 
-Base TestCase
+TestCase
 --------------------------------------
 
 `hilbert.test.TestCase` is an extension of the Django TestCase which uses the above
