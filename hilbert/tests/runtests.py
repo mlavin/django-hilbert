@@ -27,6 +27,7 @@ if not settings.configured:
             'http',
             'models',
             'views',
+            'middleware',
         )
     )
 
