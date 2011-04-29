@@ -13,6 +13,7 @@ Contents:
     motivation.rst
     decorators.rst
     http.rst
+    middleware.rst
     test.rst
     
 
