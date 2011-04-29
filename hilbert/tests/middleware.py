@@ -80,7 +80,7 @@ class SSLRedirectMiddlewareTestCase(TestCase):
     def test_pattern_match(self):
         request = self.get('pattern/')
         self.assertFalse(request.is_secure())
-        response = self.middleware.process_view(request, simple_view, [], {})
+        response = self.middleware.process_request(request)
         self.assertTrue(isinstance(response, HttpResponse))
         self.assertEqual(response.status_code, 301)
 

@@ -20,6 +20,13 @@ class SSLRedirectMiddleware(object):
     Based on http://djangosnippets.org/snippets/85/ and
     http://djangosnippets.org/snippets/880/.
     """
+
+    def process_request(self, request):
+        # Check settings patterns
+        urls = tuple([re.compile(url) for url in getattr(settings, 'SSL_PATTERNS', [])])
+        secure = any([url.search(request.path) for url in urls])
+        if secure and not request.is_secure():
+            return self._redirect(request, secure)
    
     def process_view(self, request, view_func, view_args, view_kwargs):
         # Check kwargs
@@ -28,9 +35,6 @@ class SSLRedirectMiddleware(object):
             del view_kwargs[SSL]
         else:
             secure = False
-        # Check settings patterns
-        urls = tuple([re.compile(url) for url in getattr(settings, 'SSL_PATTERNS', [])])
-        secure = secure or any([url.search(request.path) for url in urls])
         if secure and not request.is_secure():
             return self._redirect(request, secure)
 
