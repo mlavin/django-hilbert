@@ -25,3 +25,6 @@ forced onto SSL. You might want to force the admin to be used only on SSL such a
 This is a much more convienent method for handling large groups of urls or third party
 application urls than the first. However, in some ways it feels like double work of
 defining the url regular expressions.
+
+Together these middleware provides a good amount of flexibility in defining views/urls
+which require SSL.
