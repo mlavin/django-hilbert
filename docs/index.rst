@@ -16,6 +16,7 @@ Contents
     http.rst
     middleware.rst
     test.rst
+    changelog.rst
     
 
 Indices and tables
