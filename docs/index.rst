@@ -5,7 +5,8 @@
 
 .. include:: ../README.rst
 
-Contents:
+Contents
+-----------------------------------
 
 .. toctree::
     :maxdepth: 2
@@ -13,7 +14,10 @@ Contents:
     motivation.rst
     decorators.rst
     http.rst
+    middleware.rst
     test.rst
+    settings.rst
+    changelog.rst
     
 
 Indices and tables

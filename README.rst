@@ -19,6 +19,14 @@ Optional (but recommended)
 The jQuery library is not included in the distribution but should be included
 in your templates.
 
-To use the `CoverageRunner` you need to install Ned Batchelder's
+To use the :ref:`CoverageRunner` you need to install Ned Batchelder's
 `coverage.py <http://nedbatchelder.com/code/modules/coverage.html>`_.
+
+
+Installation Instructions
+-----------------------------------
+
+It is easiest to install django-hilbert from `PyPi <http://pypi.python.org/pypi>`_::
+    
+    pip instal django-hilbert
 
