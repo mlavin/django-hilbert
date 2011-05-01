@@ -28,7 +28,8 @@ if not settings.configured:
             'models',
             'views',
             'middleware',
-        )
+        ),
+        SSL_ENABLED=True
     )
 
 

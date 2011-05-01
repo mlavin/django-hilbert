@@ -151,3 +151,14 @@ class SecureTestCase(HilbertBaseTestCase):
         response = self.client.get(self.url, **{'wsgi.url_scheme': 'https'})
         self.assertEqual(response.status_code, 200)
 
+    def test_ssl_not_enabled(self):
+        """
+        Won't redirect if SSL is not marked as enabled.
+        """
+        
+        ssl = getattr(settings, 'SSL_ENABLED', False)
+        settings.SSL_ENABLED = False
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        settings.SSL_ENABLED = ssl
+

@@ -73,7 +73,10 @@ def secure(view_func):
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         if not request.is_secure():
-            return _redirect(request, True)
+            redirect = _redirect(request, True)
+            if redirect:
+                # Redirect might be None if SSL is not enabled
+                return redirect
         return view_func(request, *args, **kwargs)
     return _wrapped_view
 

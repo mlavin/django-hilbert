@@ -18,7 +18,10 @@ def _redirect(request, secure):
     newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
     if settings.DEBUG and request.method == 'POST':
         raise RuntimeError("Django can't perform a SSL redirect while maintaining POST data.")
-    return HttpResponsePermanentRedirect(newurl)
+    if getattr(settings, 'SSL_ENABLED', False):
+        return HttpResponsePermanentRedirect(newurl)
+    else:
+        return None
 
 
 class SSLRedirectMiddleware(object):

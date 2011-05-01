@@ -90,6 +90,24 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         self.assertTrue(isinstance(response, HttpResponse))
         self.assertEqual(response.status_code, 301)
 
+    def test_not_enabled_kwarg(self):
+        ssl = getattr(settings, 'SSL_ENABLED', False)
+        settings.SSL_ENABLED = False
+        request = self.get('http/')
+        self.assertFalse(request.is_secure())
+        response = self.middleware.process_view(request, simple_view, [], {'SSL': True})
+        self.assertTrue(response is None)
+        settings.SSL_ENABLED = ssl
+
+    def test_not_enabled_pattern(self):        
+        ssl = getattr(settings, 'SSL_ENABLED', False)
+        settings.SSL_ENABLED = False
+        request = self.get('pattern/')
+        self.assertFalse(request.is_secure())
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
+        settings.SSL_ENABLED = ssl
+
 
 class SSLUserMiddlewareTestCase(MiddlewareTestCase):
 
@@ -127,4 +145,15 @@ class SSLUserMiddlewareTestCase(MiddlewareTestCase):
         request = self.get(self.url)
         response = self.middleware.process_request(request)
         self.assertTrue(response is None)
+
+    def test_not_enabled(self):
+        ssl = getattr(settings, 'SSL_ENABLED', False)
+        settings.SSL_ENABLED = False
+        user = authenticate(username=self.username, password=self.password)
+        request = self.get(self.url)
+        # Faking auth middleware
+        request.user = user
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
+        settings.SSL_ENABLED = ssl
 
