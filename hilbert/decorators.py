@@ -13,6 +13,7 @@ __all__ = (
     'ajax_login_required',
     'ajax_only',
     'anonymous_required',
+    'secure',
 )
 
 
