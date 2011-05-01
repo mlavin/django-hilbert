@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils.decorators import available_attrs
 
+from hilbert.middleware import SSL
+
 
 __all__ = (
     'ajax_login_required',
@@ -62,3 +64,14 @@ def anonymous_required(func=None, url=None):
         return _dec
     else:
         return _dec(func)
+
+
+def secure(view_func):
+    """Adds SSL kwarg to work with SSLRedirectMiddleware."""
+
+    @wraps(view_func, assigned=available_attrs(view_func))
+    def _wrapped_view(request, *args, **kwargs):
+        kwargs[SSL] = True
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
