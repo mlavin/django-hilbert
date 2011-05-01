@@ -7,6 +7,7 @@ v0.2
 - Added :ref:`SSLRedirectMiddleware`
 - Added :ref:`SSLUserMiddleware`
 - Added :ref:`anonymous_required` decorator
+- Added :ref:`secure` decorator
 - Documentation updates
 
 
