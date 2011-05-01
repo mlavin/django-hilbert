@@ -62,3 +62,21 @@ url as either an absolute path or as as named url pattern.
     def anonymous_only_view(request):
         return HttpResponse()
 
+
+.. _secure:
+
+secure
+--------------------------------------
+
+.. versionadded:: 0.2
+
+This decorator is similar to :ref:`SSLRedirectMiddleware` but works independently.
+Decorating a view with :ref:`secure` will force this view to be accessed only
+over SSL. 
+
+.. code-block:: python
+
+    @secure
+    def secure_view(request):
+        return HttpResponse()
+
