@@ -60,7 +60,10 @@ The `CoverageRunner` is a new test runner based on snippets
 `coverage.py <http://nedbatchelder.com/code/modules/coverage.html>`_ to determine
 the percent of code executed by the test suite. It can be enabled by setting
 `TEST_RUNNER='hilbert.test.CoverageRunner'` in your Django settings file. You must also
-define a set of submodules to be included in the report ::
+define a set of submodules to be included in the report using the setting
+:ref:`COVERAGE_MODULES`.
+
+.. code-block:: python
 
     COVERAGE_MODULES = (
         'decorators',

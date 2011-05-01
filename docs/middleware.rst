@@ -19,7 +19,7 @@ when you including third party urls. This also will not work for `contrib.flatpa
 since they are not tied to a view.
 
 The second method is taken from `snippet 880 <http://djangosnippets.org/snippets/880/>`_
-which adds a setting `SSL_PATTERNS` which are used to match urls that should be
+which adds a setting :ref:`SSL_PATTERNS` which are used to match urls that should be
 forced onto SSL. You might want to force the admin to be used only on SSL such as
 
 .. code-block:: python

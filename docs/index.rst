@@ -16,6 +16,7 @@ Contents
     http.rst
     middleware.rst
     test.rst
+    settings.rst
     changelog.rst
     
 
