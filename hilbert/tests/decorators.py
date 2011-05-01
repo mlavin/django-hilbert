@@ -2,15 +2,21 @@
 Tests for Django-Hilbert decorators.
 """
 
+import os
+
 from django.conf import settings
 
+from hilbert.middleware import SSLRedirectMiddleware
 from hilbert.tests.base import HilbertBaseTestCase
+
 
 __all__ = (
     'AjaxLoginRequiredTestCase',
     'AjaxOnlyTestCase',
     'AnonymousRequiredTestCase',
+    'SecureTestCase',
 )
+
 
 class AjaxLoginRequiredTestCase(HilbertBaseTestCase):
 
@@ -116,4 +122,32 @@ class AnonymousRequiredTestCase(HilbertBaseTestCase):
         self.assertRedirects(response, self.custom_target)
         self.client.logout()
 
+
+class SecureTestCase(HilbertBaseTestCase):
+
+    def setUp(self):
+        super(SecureTestCase, self).setUp()
+        self.url = '/hilbert/test/secure/'
+        self.client.handler.load_middleware()
+        self.middleware = SSLRedirectMiddleware()
+        self.client.handler._request_middleware.insert(0, self.middleware.process_request)
+        self.client.handler._view_middleware.insert(0, self.middleware.process_view)
+
+    def test_response(self):
+        """
+        Non-secure requests will get a redirect.
+        """
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 301)
+
+    def test_ssl_response(self):
+        """
+        Secure requests will get a successful response.
+        """
+
+        # Fake HTTPS
+        # This might only work in Django 1.3
+        response = self.client.get(self.url, **{'wsgi.url_scheme': 'https'})
+        self.assertEqual(response.status_code, 200)
 

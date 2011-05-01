@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import *
 from django.http import HttpResponse
 
-from hilbert.decorators import ajax_login_required, ajax_only, anonymous_required
+from hilbert.decorators import ajax_login_required, ajax_only
+from hilbert.decorators import anonymous_required, secure
 from hilbert.http import JsonResponse
 
 
@@ -32,6 +33,10 @@ def json_response(request):
 def simple_view(request):
     return HttpResponse()
 
+@secure
+def secure_view(request):
+    return HttpResponse()
+
 
 # Urls for testing
 urlpatterns = patterns('',
@@ -41,5 +46,6 @@ urlpatterns = patterns('',
     url(r'^hilbert/test/anonymous/$', anonymous_only_view),
     url(r'^hilbert/test/anonymous-custom/$', anonymous_custom_view),
     url(r'^hilbert/test/simple/$', simple_view),
+    url(r'^hilbert/test/secure/$', secure_view),
     url(r'^$', simple_view),
 )

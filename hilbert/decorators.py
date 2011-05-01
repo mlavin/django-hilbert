@@ -1,4 +1,4 @@
-from functools import wraps
+from functools import partial, wraps
 
 from django import http
 from django.conf import settings
@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils.decorators import available_attrs
 
-from hilbert.middleware import SSL
+from hilbert.middleware import _redirect
 
 
 __all__ = (
@@ -67,11 +67,12 @@ def anonymous_required(func=None, url=None):
 
 
 def secure(view_func):
-    """Adds SSL kwarg to work with SSLRedirectMiddleware."""
+    """Handles SSL redirect on the view level."""
 
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
-        kwargs[SSL] = True
+        if not request.is_secure():
+            return _redirect(request, True)
         return view_func(request, *args, **kwargs)
     return _wrapped_view
 
