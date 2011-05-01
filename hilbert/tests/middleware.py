@@ -1,24 +1,22 @@
 import os
 
 from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest, HttpResponse
-from django.test import TestCase
 
-from hilbert.middleware import SSLRedirectMiddleware
+from hilbert.middleware import SSLRedirectMiddleware, SSLUserMiddleware
+from hilbert.tests.base import HilbertBaseTestCase
 from hilbert.tests.urls import simple_view
 
 
 __all__ = (
     'SSLRedirectMiddlewareTestCase',
+    'SSLUserMiddlewareTestCase',
 )
 
 
-class SSLRedirectMiddlewareTestCase(TestCase):
-
-    def setUp(self):
-        super(SSLRedirectMiddlewareTestCase, self).setUp()
-        settings.SSL_PATTERNS = [r'pattern/$', ]
-        self.middleware = SSLRedirectMiddleware()
+class MiddlewareTestCase(HilbertBaseTestCase):
 
     def _request(self, path, ssl=False):
         request = HttpRequest()
@@ -44,6 +42,14 @@ class SSLRedirectMiddlewareTestCase(TestCase):
         request.META['REQUEST_METHOD'] = 'POST'
         request.method = 'POST'
         return request
+
+
+class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
+
+    def setUp(self):
+        super(SSLRedirectMiddlewareTestCase, self).setUp()
+        settings.SSL_PATTERNS = [r'pattern/$', ]
+        self.middleware = SSLRedirectMiddleware()
 
     def test_ssl_kwarg(self):
         request = self.get('http/')
@@ -83,4 +89,42 @@ class SSLRedirectMiddlewareTestCase(TestCase):
         response = self.middleware.process_request(request)
         self.assertTrue(isinstance(response, HttpResponse))
         self.assertEqual(response.status_code, 301)
+
+
+class SSLUserMiddlewareTestCase(MiddlewareTestCase):
+
+    def setUp(self):
+        super(SSLUserMiddlewareTestCase, self).setUp()
+        self.middleware = SSLUserMiddleware()
+        self.test_user = self.create_user()
+        self.url = '/hilbert/test/simple/'
+
+    def test_authenticated(self):
+        user = authenticate(username=self.username, password=self.password)
+        request = self.get(self.url)
+        # Faking auth middleware
+        request.user = user
+        response = self.middleware.process_request(request)
+        self.assertTrue(isinstance(response, HttpResponse))
+        self.assertEqual(response.status_code, 301)
+
+    def test_authenticated_ssl(self):
+        user = authenticate(username=self.username, password=self.password)
+        request = self.get(self.url, ssl=True)
+        # Faking auth middleware
+        request.user = user
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
+
+    def test_anonymous(self):
+        request = self.get(self.url)
+        # Faking auth middleware
+        request.user = AnonymousUser()
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
+
+    def test_no_user(self):
+        request = self.get(self.url)
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
 

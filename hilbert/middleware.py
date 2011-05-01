@@ -6,13 +6,24 @@ from django.http import HttpResponsePermanentRedirect, get_host
 
 __all__ = (
     'SSLRedirectMiddleware',
+    'SSLUserMiddleware',
 )
 
 
 SSL = 'SSL'
 
 
-class SSLRedirectMiddleware(object):
+class SSLRedirectBase(object):
+
+    def _redirect(self, request, secure):
+        protocol = secure and "https" or "http"
+        newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
+        if settings.DEBUG and request.method == 'POST':
+            raise RuntimeError("Django can't perform a SSL redirect while maintaining POST data.")
+        return HttpResponsePermanentRedirect(newurl)
+
+
+class SSLRedirectMiddleware(SSLRedirectBase):
     """
     Pulls 'SSL' keyword out of url pattern definition or matches patterns in
     SSL_PATTERNS in the settings to determine if this view should be forced onto SSL.
@@ -38,9 +49,14 @@ class SSLRedirectMiddleware(object):
         if secure and not request.is_secure():
             return self._redirect(request, secure)
 
-    def _redirect(self, request, secure):
-        protocol = secure and "https" or "http"
-        newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
-        if settings.DEBUG and request.method == 'POST':
-            raise RuntimeError("Django can't perform a SSL redirect while maintaining POST data.")
-        return HttpResponsePermanentRedirect(newurl)
+
+class SSLUserMiddleware(SSLRedirectBase):
+    """
+    Ensures that all requests for authenticated users are done over SSL.
+    """
+
+    def process_request(self, request):
+        user = getattr(request, 'user', None)
+        if user and user.is_authenticated() and not request.is_secure():
+            return self._redirect(request, True)
+
