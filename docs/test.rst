@@ -5,7 +5,9 @@ The test module defines a new test client, base testcase, testing mixins, and
 an alternate test runner.
 
 
-New Test Client
+.. _TestClient:
+
+Test Client
 --------------------------------------
 
 `hilbert.test.Client` is a simple extension of the Django test client which allows
@@ -13,7 +15,9 @@ for an extra argument in `get` and `post` called `is_ajax`. This will default to
 `False` but when passed as `True` it will make the request as an AJAX request.
 
 
-Base TestCase
+.. _TestCase:
+
+TestCase
 --------------------------------------
 
 `hilbert.test.TestCase` is an extension of the Django TestCase which uses the above
@@ -45,6 +49,8 @@ test client and defines some helpful methods.
     :return: A newly created User model
 
 
+.. _CoverageRunner:
+
 CoverageRunner
 --------------------------------------
 
@@ -54,7 +60,10 @@ The `CoverageRunner` is a new test runner based on snippets
 `coverage.py <http://nedbatchelder.com/code/modules/coverage.html>`_ to determine
 the percent of code executed by the test suite. It can be enabled by setting
 `TEST_RUNNER='hilbert.test.CoverageRunner'` in your Django settings file. You must also
-define a set of submodules to be included in the report ::
+define a set of submodules to be included in the report using the setting
+:ref:`COVERAGE_MODULES`.
+
+.. code-block:: python
 
     COVERAGE_MODULES = (
         'decorators',
@@ -68,6 +77,8 @@ Using this setting the test runner will report the coverage of listed submodules
 apps (if they exist).
 
 
+.. _ViewTestMixin:
+
 ViewTestMixin
 --------------------------------------
 
@@ -76,10 +87,12 @@ reverse the data returned by `get_urls()` and attach it to `self.url`. It also c
 one test which does a GET request on the url.
 
 
+.. _AuthViewMixin:
+
 AuthViewMixin
 --------------------------------------
 
-`AuthViewMixin` extends the `ViewTestMixin` for testing views which require authentication.
+:ref:`AuthViewMixin` extends the :ref:`ViewTestMixin` for testing views which require authentication.
 It automatically creates a user and signs them in for any requests.
 It adds an additional test to ensure that authentication is required. This must be used in
-conjunction with `hilbert.test.TestCase`.
+conjunction with :ref:`hilbert.test.TestCase`.
