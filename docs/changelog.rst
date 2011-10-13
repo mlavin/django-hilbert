@@ -1,6 +1,14 @@
 Change Log
 ======================================
 
+.. _v0.3:
+
+v0.3
+-----------------------------------
+
+- Added :ref:`AppMediaStorage`
+- **BACKWARDS INCOMPATIBLE** change to :ref:`ViewTestMixin` url --> url_name
+
 .. _v0.2:
 
 v0.2
