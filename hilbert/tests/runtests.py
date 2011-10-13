@@ -21,6 +21,7 @@ if not settings.configured:
             'hilbert',
         ),
         ROOT_URLCONF='hilbert.tests.urls',
+        SITE_ID=1,
         TEST_RUNNER='hilbert.test.CoverageRunner',
         COVERAGE_MODULES=(
             'decorators',

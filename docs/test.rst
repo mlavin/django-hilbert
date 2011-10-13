@@ -83,8 +83,20 @@ ViewTestMixin
 --------------------------------------
 
 This is a testing mixin to help writing tests for your Django views. It will automatically
-reverse the data returned by `get_urls()` and attach it to `self.url`. It also contains
+reverse the data returned by `get_url()` and attach it to `self.url`. It also contains
 one test which does a GET request on the url.
+
+.. versionadded:: 0.3
+
+The `ViewTestMixin` changed in version 0.3 to expect a class attribute `url_name`.
+
+.. code-block:: python
+
+    class DashboardTestCase(TestCase, ViewTestMixin):
+        url_name = 'dashboard'
+
+If your url needs either args or kwargs you can override `get_url_args` or
+`get_url_kwargs`.
 
 
 .. _AuthViewMixin:
