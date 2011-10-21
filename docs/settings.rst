@@ -50,3 +50,19 @@ does not exist for a given app it will be skipped.
 If you are not using :ref:`CoverageRunner` then you do not need to define this
 setting.
 
+.. _DEFAULT_TEST_LABELS:
+
+DEFAULT_TEST_LABELS
+-----------------------------------
+
+:ref:`DEFAULT_TEST_LABELS` is used by the :ref:`CoverageRunner`. It defines
+the default set of test labels when none are passed in invoking the test
+runner. This allows running tests on the same set of apps, test classes,
+and test methods each time. 
+
+.. code-block:: python
+
+    DEFAULT_TEST_LABELS = ['app1', 'app2.TestClass', 'app3.TestClass.test_method']
+
+If this is set, passing 'all' as the only test label
+on the command line will run all the tests.
