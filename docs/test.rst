@@ -76,6 +76,23 @@ define a set of submodules to be included in the report using the setting
 Using this setting the test runner will report the coverage of listed submodules of the tested
 apps (if they exist).
 
+If you usually want to pass the same set of test labels when you run tests,
+you can set :ref:`DEFAULT_TEST_LABELS` in your settings.
+
+.. code-block:: python
+
+    DEFAULT_TEST_LABELS = ['app1', 'app2.TestClass', 'app3.TestClass.test_method']
+
+Then `django-admin.py test` will act like
+
+.. code-block:: bash
+
+    django-admin.py test app1 app2.TestClass app3.TestClass.test_method
+
+If you've done that, you can still pass 'all' on the command line to run
+tests as if you had not passed any test labels, e.g.
+`run test all`.
+
 
 .. _ViewTestMixin:
 
