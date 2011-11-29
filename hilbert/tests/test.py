@@ -1,6 +1,8 @@
-from hilbert.test import TestCase, CoverageRunner
 from django.test.simple import DjangoTestSuiteRunner
 from django.conf import settings
+
+from hilbert.test import TestCase, CoverageRunner
+
 
 class TestRunnerTest(TestCase):
     def do_test(self, default_test_labels_setting, test_labels_passed,
@@ -16,8 +18,10 @@ class TestRunnerTest(TestCase):
             settings.DEFAULT_TEST_LABELS = default_test_labels_setting
 
         # Avoid all the coverage machinery
-        coverage_modules = settings.COVERAGE_MODULES
-        delattr(settings, 'COVERAGE_MODULES')
+        coverage_modules = []
+        if hasattr(settings, 'COVERAGE_MODULES'):
+            coverage_modules = settings.COVERAGE_MODULES
+            delattr(settings, 'COVERAGE_MODULES')
 
         # monkey-patch DjangoTestSuiteRunner, which is what hilbert runner
         # will invoke
@@ -49,7 +53,6 @@ class TestRunnerTest(TestCase):
         """If default is not set, you get whatever you say on the command line"""
         self.do_test(None, [], [])
         self.do_test(None, ['x', 'y'], ['x', 'y'])
-
 
     def test_default_test_labels_all(self):
         """If default is set, you can act like it's not by saying 'all'
