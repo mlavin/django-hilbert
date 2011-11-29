@@ -76,6 +76,8 @@ define a set of submodules to be included in the report using the setting
 Using this setting the test runner will report the coverage of listed submodules of the tested
 apps (if they exist).
 
+.. versionadded:: 0.4
+
 If you usually want to pass the same set of test labels when you run tests,
 you can set :ref:`DEFAULT_TEST_LABELS` in your settings.
 
