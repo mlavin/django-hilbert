@@ -28,6 +28,20 @@ use the `SSL` keyword argument in your url definitions.
 See :ref:`SSLRedirectMiddleware` for more detail.
 
 
+.. _SSL_WHITELIST:
+
+SSL_WHITELIST
+-----------------------------------
+
+.. versionadded:: 0.4
+
+:ref:`SSL_WHITELIST` is used to configure the :ref:`SSLRedirectMiddleware`. 
+When enabled any secure request that which is not marked as secure by either the
+keyword argument, :ref:`secure` decorator or matches one of :ref:`SSL_PATTERNS`
+will be redirected off SSL.
+:ref:`SSL_WHITELIST` defaults to `False`.
+
+
 .. _COVERAGE_MODULES:
 
 COVERAGE_MODULES
