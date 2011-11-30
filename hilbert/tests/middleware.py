@@ -108,6 +108,26 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         self.assertTrue(response is None)
         settings.SSL_ENABLED = ssl
 
+    def test_whitelist_ssl(self):
+        whitelist = getattr(settings, 'SSL_WHITELIST', False)
+        settings.SSL_WHITELIST = True
+        request = self.get('http/', ssl=True)
+        self.assertTrue(request.is_secure())
+        response = self.middleware.process_view(request, simple_view, [], {})
+        self.assertTrue(isinstance(response, HttpResponse))
+        self.assertEqual(response.status_code, 301)
+        settings.SSL_WHITELIST = whitelist
+
+    def test_whitelist_ssl_keep_secure(self):
+        whitelist = getattr(settings, 'SSL_WHITELIST', False)
+        settings.SSL_WHITELIST = True
+        request = self.get('http/', ssl=True)
+        self.assertTrue(request.is_secure())
+        request.keep_secure = True
+        response = self.middleware.process_view(request, simple_view, [], {})
+        self.assertTrue(response is None)
+        settings.SSL_WHITELIST = whitelist
+
 
 class SSLUserMiddlewareTestCase(MiddlewareTestCase):
 
