@@ -33,6 +33,14 @@ defining the url regular expressions.
 Together these middleware provides a good amount of flexibility in defining views/urls
 which require SSL. See also :ref:`SSLUserMiddleware`.
 
+.. versionadded:: 0.4
+
+You can optionally redirect requests off of SSL by enabling :ref:`SSL_WHITELIST`.
+When enabled any HTTPS request which does not pass the `SSL` kwarg, use the :ref:`secure`
+decorator or match one of :ref:`SSL_PATTERNS` will be redirected back to HTTP.
+Additional middlware can also mark the request with `keep_secure` to keep
+the request from being redirected. 
+
 
 .. _SSLUserMiddleware:
 
@@ -46,7 +54,9 @@ it will force authenticated users to always use SSL.
 
 To use this middleware you must be using 
 `django.contrib.auth.middleware.AuthenticationMiddleware <http://docs.djangoproject.com/en/1.3/ref/middleware/#module-django.contrib.auth.middleware>`_
-and it must be included above :ref:`SSLUserMiddleware`.
+and it must be included above :ref:`SSLUserMiddleware`. Note if you would like 
+to use both :ref:`SSLRedirectMiddleware` and :ref:`SSLUserMiddleware` then 
+:ref:`SSLUserMiddleware` should be included first.
 
 .. code-block:: python
 
@@ -56,6 +66,6 @@ and it must be included above :ref:`SSLUserMiddleware`.
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         ...
         'hilbert.middleware.SSLUserMiddleware',
+        'hilbert.middleware.SSLRedirectMiddleware',
     )
-
 
