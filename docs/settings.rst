@@ -28,6 +28,20 @@ use the `SSL` keyword argument in your url definitions.
 See :ref:`SSLRedirectMiddleware` for more detail.
 
 
+.. _SSL_WHITELIST:
+
+SSL_WHITELIST
+-----------------------------------
+
+.. versionadded:: 0.4
+
+:ref:`SSL_WHITELIST` is used to configure the :ref:`SSLRedirectMiddleware`. 
+When enabled any secure request that which is not marked as secure by either the
+keyword argument, :ref:`secure` decorator or matches one of :ref:`SSL_PATTERNS`
+will be redirected off SSL.
+:ref:`SSL_WHITELIST` defaults to `False`.
+
+
 .. _COVERAGE_MODULES:
 
 COVERAGE_MODULES
@@ -50,3 +64,22 @@ does not exist for a given app it will be skipped.
 If you are not using :ref:`CoverageRunner` then you do not need to define this
 setting.
 
+
+.. _DEFAULT_TEST_LABELS:
+
+DEFAULT_TEST_LABELS
+-----------------------------------
+
+.. versionadded:: 0.4
+
+:ref:`DEFAULT_TEST_LABELS` is used by the :ref:`CoverageRunner`. It defines
+the default set of test labels when none are passed in invoking the test
+runner. This allows running tests on the same set of apps, test classes,
+and test methods each time. 
+
+.. code-block:: python
+
+    DEFAULT_TEST_LABELS = ['app1', 'app2.TestClass', 'app3.TestClass.test_method']
+
+If this is set, passing 'all' as the only test label
+on the command line will run all the tests.

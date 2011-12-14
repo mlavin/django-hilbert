@@ -90,6 +90,15 @@ class CoverageRunner(DjangoTestSuiteRunner):
     def run_tests(self, test_labels, extra_tests=None, **kwargs):
         run_with_coverage = hasattr(settings, 'COVERAGE_MODULES')
 
+        # Set DEFAULT_TEST_LABELS to run just the tests we want
+        # when we don't give 'test' any arguments
+        if not test_labels:
+            test_labels = getattr(settings, 'DEFAULT_TEST_LABELS', [])
+        # If we've set DEFAULT_TEST_LABELS and we want to run them all,
+        # just say 'test all'
+        elif list(test_labels) == ['all']:
+            test_labels = []
+
         if run_with_coverage:
             import coverage
             coverage.use_cache(0)

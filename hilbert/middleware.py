@@ -18,7 +18,7 @@ def _redirect(request, secure):
     newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
     if getattr(settings, 'SSL_ENABLED', False):
         if settings.DEBUG and request.method == 'POST':
-            raise RuntimeError("Django can't perform a SSL redirect while maintaining POST data.")
+            raise RuntimeError("Django can't perform a redirect while maintaining POST data.")
         return HttpResponsePermanentRedirect(newurl)
     else:
         return None
@@ -37,8 +37,14 @@ class SSLRedirectMiddleware(object):
         # Check settings patterns
         urls = tuple([re.compile(url) for url in getattr(settings, 'SSL_PATTERNS', [])])
         secure = any([url.search(request.path) for url in urls])
-        if secure and not request.is_secure():
-            return _redirect(request, secure)
+        if request.is_secure():
+            if not secure and not getattr(request, 'keep_secure', False):
+                if getattr(settings, 'SSL_WHITELIST', False):
+                    # Redirect off SSL
+                    return _redirect(request, False)
+        else:
+            if secure:
+               return _redirect(request, True) 
    
     def process_view(self, request, view_func, view_args, view_kwargs):
         # Check kwargs
@@ -47,8 +53,14 @@ class SSLRedirectMiddleware(object):
             del view_kwargs[SSL]
         else:
             secure = False
-        if secure and not request.is_secure():
-            return _redirect(request, secure)
+        if request.is_secure():
+            if not secure and not getattr(request, 'keep_secure', False):
+                if getattr(settings, 'SSL_WHITELIST', False):
+                    # Redirect off SSL
+                    return _redirect(request, False)
+        else:
+            if secure:
+               return _redirect(request, True)               
 
 
 class SSLUserMiddleware(object):
@@ -58,6 +70,9 @@ class SSLUserMiddleware(object):
 
     def process_request(self, request):
         user = getattr(request, 'user', None)
-        if user and user.is_authenticated() and not request.is_secure():
-            return _redirect(request, True)
+        if user and user.is_authenticated():
+            if request.is_secure():
+                request.keep_secure = True
+            else:
+                return _redirect(request, True)
 
