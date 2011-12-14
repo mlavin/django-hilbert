@@ -126,4 +126,4 @@ AuthViewMixin
 :ref:`AuthViewMixin` extends the :ref:`ViewTestMixin` for testing views which require authentication.
 It automatically creates a user and signs them in for any requests.
 It adds an additional test to ensure that authentication is required. This must be used in
-conjunction with :ref:`hilbert.test.TestCase`.
+conjunction with :ref:`hilbert.test.TestCase <TestCase>`.
