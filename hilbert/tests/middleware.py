@@ -68,6 +68,8 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         request = self.get('https/', ssl=True)
         self.assertTrue(request.is_secure())
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
         response = self.middleware.process_view(request, simple_view, [], {'SSL': True})
         self.assertTrue(response is None)
 
@@ -89,6 +91,8 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         request = self.get('http/')
         self.assertFalse(request.is_secure())
+        response = self.middleware.process_request(request)
+        self.assertTrue(response is None)
         response = self.middleware.process_view(request, simple_view, [], {})
         self.assertTrue(response is None)
 
@@ -99,11 +103,15 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         whitelist = getattr(settings, 'SSL_WHITELIST', False)
         settings.SSL_WHITELIST = False
-        request = self.get('https/', ssl=True)
-        self.assertTrue(request.is_secure())
-        response = self.middleware.process_view(request, simple_view, [], {})
-        self.assertTrue(response is None)
-        settings.SSL_WHITELIST = whitelist
+        try:
+            request = self.get('https/', ssl=True)
+            self.assertTrue(request.is_secure())
+            response = self.middleware.process_request(request)
+            self.assertTrue(response is None)
+            response = self.middleware.process_view(request, simple_view, [], {})
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_WHITELIST = whitelist
 
     def test_https_no_kwarg_whitelist(self):
         """
@@ -112,12 +120,14 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         whitelist = getattr(settings, 'SSL_WHITELIST', False)
         settings.SSL_WHITELIST = True
-        request = self.get('http/', ssl=True)
-        self.assertTrue(request.is_secure())
-        response = self.middleware.process_view(request, simple_view, [], {})
-        self.assertTrue(isinstance(response, HttpResponse))
-        self.assertEqual(response.status_code, 301)
-        settings.SSL_WHITELIST = whitelist
+        try:
+            request = self.get('http/', ssl=True)
+            self.assertTrue(request.is_secure())
+            response = self.middleware.process_view(request, simple_view, [], {})
+            self.assertTrue(isinstance(response, HttpResponse))
+            self.assertEqual(response.status_code, 301)
+        finally:
+            settings.SSL_WHITELIST = whitelist
 
     def test_whitelist_keep_secure(self):
         """
@@ -126,12 +136,33 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         whitelist = getattr(settings, 'SSL_WHITELIST', False)
         settings.SSL_WHITELIST = True
-        request = self.get('http/', ssl=True)
-        self.assertTrue(request.is_secure())
-        request.keep_secure = True
-        response = self.middleware.process_view(request, simple_view, [], {})
-        self.assertTrue(response is None)
-        settings.SSL_WHITELIST = whitelist
+        try:
+            request = self.get('http/', ssl=True)
+            self.assertTrue(request.is_secure())
+            request.keep_secure = True
+            response = self.middleware.process_request(request)
+            self.assertTrue(response is None)
+            response = self.middleware.process_view(request, simple_view, [], {})
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_WHITELIST = whitelist
+
+    def test_https_kwarg_whitelist(self):
+        """
+        Make HTTPS request to SSL view and SSL_WHITELIST is True.
+        There should be no redirect.
+        """
+        whitelist = getattr(settings, 'SSL_WHITELIST', False)
+        settings.SSL_WHITELIST = True
+        try:
+            request = self.get('https/', ssl=True)
+            self.assertTrue(request.is_secure())
+            response = self.middleware.process_request(request)
+            self.assertTrue(response is None)
+            response = self.middleware.process_view(request, simple_view, [], {'SSL': True})
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_WHITELIST = whitelist
 
     def test_pattern_match(self):
         """
@@ -160,11 +191,13 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         whitelist = getattr(settings, 'SSL_WHITELIST', False)
         settings.SSL_WHITELIST = False
-        request = self.get('simple/', ssl=True)
-        self.assertTrue(request.is_secure())
-        response = self.middleware.process_request(request)
-        self.assertTrue(response is None)
-        settings.SSL_WHITELIST = whitelist
+        try:
+            request = self.get('simple/', ssl=True)
+            self.assertTrue(request.is_secure())
+            response = self.middleware.process_request(request)
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_WHITELIST = whitelist
 
     def test_no_pattern_match_https_whitelist(self):
         """
@@ -173,12 +206,14 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         whitelist = getattr(settings, 'SSL_WHITELIST', False)
         settings.SSL_WHITELIST = True
-        request = self.get('simple/', ssl=True)
-        self.assertTrue(request.is_secure())
-        response = self.middleware.process_request(request)
-        self.assertTrue(isinstance(response, HttpResponse))
-        self.assertEqual(response.status_code, 301)
-        settings.SSL_WHITELIST = whitelist
+        try:
+            request = self.get('simple/', ssl=True)
+            self.assertTrue(request.is_secure())
+            response = self.middleware.process_request(request)
+            self.assertTrue(isinstance(response, HttpResponse))
+            self.assertEqual(response.status_code, 301)
+        finally:
+            settings.SSL_WHITELIST = whitelist
 
     def test_not_enabled_kwarg(self):
         """
@@ -187,11 +222,13 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """
         ssl = getattr(settings, 'SSL_ENABLED', False)
         settings.SSL_ENABLED = False
-        request = self.get('http/')
-        self.assertFalse(request.is_secure())
-        response = self.middleware.process_view(request, simple_view, [], {'SSL': True})
-        self.assertTrue(response is None)
-        settings.SSL_ENABLED = ssl
+        try:
+            request = self.get('http/')
+            self.assertFalse(request.is_secure())
+            response = self.middleware.process_view(request, simple_view, [], {'SSL': True})
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_ENABLED = ssl
 
     def test_not_enabled_pattern(self):
         """
@@ -200,11 +237,13 @@ class SSLRedirectMiddlewareTestCase(MiddlewareTestCase):
         """      
         ssl = getattr(settings, 'SSL_ENABLED', False)
         settings.SSL_ENABLED = False
-        request = self.get('pattern/')
-        self.assertFalse(request.is_secure())
-        response = self.middleware.process_request(request)
-        self.assertTrue(response is None)
-        settings.SSL_ENABLED = ssl
+        try:
+            request = self.get('pattern/')
+            self.assertFalse(request.is_secure())
+            response = self.middleware.process_request(request)
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_ENABLED = ssl
 
 
 class SSLUserMiddlewareTestCase(MiddlewareTestCase):
@@ -267,13 +306,15 @@ class SSLUserMiddlewareTestCase(MiddlewareTestCase):
         """
         ssl = getattr(settings, 'SSL_ENABLED', False)
         settings.SSL_ENABLED = False
-        user = authenticate(username=self.username, password=self.password)
-        request = self.get(self.url)
-        # Faking auth middleware
-        request.user = user
-        response = self.middleware.process_request(request)
-        self.assertTrue(response is None)
-        settings.SSL_ENABLED = ssl
+        try:
+            user = authenticate(username=self.username, password=self.password)
+            request = self.get(self.url)
+            # Faking auth middleware
+            request.user = user
+            response = self.middleware.process_request(request)
+            self.assertTrue(response is None)
+        finally:
+            settings.SSL_ENABLED = ssl
 
     def test_authenticated_keep_secure(self):
         """
