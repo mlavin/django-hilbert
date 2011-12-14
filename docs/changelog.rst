@@ -1,6 +1,15 @@
 Change Log
 ======================================
 
+.. _v0.4:
+
+v0.4
+-----------------------------------
+
+- Added :ref:`DEFAULT_TEST_LABELS` setting for :ref:`CoverageRunner` (Thanks poirier)
+- Added :ref:`SSL_WHITELIST` setting for :ref:`SSLRedirectMiddleware`
+- Test suite cleanup
+
 .. _v0.3:
 
 v0.3
