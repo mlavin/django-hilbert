@@ -38,10 +38,8 @@ class SSLRedirectMiddleware(object):
         urls = tuple([re.compile(url) for url in getattr(settings, 'SSL_PATTERNS', [])])
         secure = any([url.search(request.path) for url in urls])
         if request.is_secure():
-            if secure and not getattr(request, 'keep_secure', False):
-                if getattr(settings, 'SSL_WHITELIST', False):
-                    # Redirect off SSL
-                    return _redirect(request, False)
+            if secure:
+                request.keep_secure = True
         else:
             if secure:
                return _redirect(request, True) 
