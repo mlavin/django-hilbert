@@ -1,6 +1,13 @@
 Change Log
 ======================================
 
+.. _v0.4.1:
+
+v0.4.1
+-----------------------------------
+
+- Fix issue with :ref:`SSLRedirectMiddleware` when using :ref:`SSL_WHITELIST` and `SSL` keyword.
+
 .. _v0.4:
 
 v0.4
