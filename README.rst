@@ -28,5 +28,5 @@ Installation Instructions
 
 It is easiest to install django-hilbert from `PyPi <http://pypi.python.org/pypi>`_::
     
-    pip instal django-hilbert
+    pip install django-hilbert
 
