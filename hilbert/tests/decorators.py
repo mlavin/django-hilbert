@@ -10,14 +10,6 @@ from hilbert.middleware import SSLRedirectMiddleware
 from hilbert.tests.base import HilbertBaseTestCase
 
 
-__all__ = (
-    'AjaxLoginRequiredTestCase',
-    'AjaxOnlyTestCase',
-    'AnonymousRequiredTestCase',
-    'SecureTestCase',
-)
-
-
 class AjaxLoginRequiredTestCase(HilbertBaseTestCase):
 
     def setUp(self):

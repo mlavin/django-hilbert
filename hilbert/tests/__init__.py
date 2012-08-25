@@ -1,5 +1,5 @@
-from hilbert.tests.base import *
-from hilbert.tests.decorators import *
-from hilbert.tests.http import *
-from hilbert.tests.middleware import *
-from hilbert.tests.test import *
+from .decorators import AjaxLoginRequiredTestCase, AjaxOnlyTestCase
+from .decorators import AnonymousRequiredTestCase, SecureTestCase
+from .http import JsonResponseTestCase
+from .middleware import SSLRedirectMiddlewareTestCase, SSLUserMiddlewareTestCase
+from .test import TestRunnerTest, NamedViewTest, ViewArgsTest, ViewKwargsTest

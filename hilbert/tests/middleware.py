@@ -10,12 +10,6 @@ from hilbert.tests.base import HilbertBaseTestCase
 from hilbert.tests.urls import simple_view
 
 
-__all__ = (
-    'SSLRedirectMiddlewareTestCase',
-    'SSLUserMiddlewareTestCase',
-)
-
-
 class MiddlewareTestCase(HilbertBaseTestCase):
 
     def _request(self, path, ssl=False):

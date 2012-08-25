@@ -1,7 +1,7 @@
 from django.test.simple import DjangoTestSuiteRunner
 from django.conf import settings
 
-from hilbert.test import TestCase, CoverageRunner
+from hilbert.test import TestCase, CoverageRunner, ViewTestMixin
 
 
 class TestRunnerTest(TestCase):
@@ -58,3 +58,27 @@ class TestRunnerTest(TestCase):
         """If default is set, you can act like it's not by saying 'all'
         on the command line"""
         self.do_test(['foo', 'bar'], ['all'], [])
+
+
+class NamedViewTest(ViewTestMixin, TestCase):
+    "Tests the usage of ViewTestMixin for view with no args."
+
+    url_name = 'simple'
+
+
+class ViewArgsTest(ViewTestMixin, TestCase):
+    "Tests the usage of ViewTestMixin for view using args."
+
+    url_name = 'simple-args'
+
+    def get_url_args(self):
+        return (1, )
+
+
+class ViewKwargsTest(ViewTestMixin, TestCase):
+    "Tests the usage of ViewTestMixin for view using kwargs."
+
+    url_name = 'simple-kwargs'
+
+    def get_url_kwargs(self):
+        return {'foo': 'bar'}

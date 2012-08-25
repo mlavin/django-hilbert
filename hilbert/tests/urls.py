@@ -30,7 +30,7 @@ def json_response(request):
     return JsonResponse({'foo': 'bar'})
 
 
-def simple_view(request):
+def simple_view(request, *args, **kwargs):
     return HttpResponse()
 
 @secure
@@ -45,7 +45,9 @@ urlpatterns = patterns('',
     url(r'^hilbert/test/jsonresponse/$', json_response),
     url(r'^hilbert/test/anonymous/$', anonymous_only_view),
     url(r'^hilbert/test/anonymous-custom/$', anonymous_custom_view),
-    url(r'^hilbert/test/simple/$', simple_view),
+    url(r'^hilbert/test/simple/$', simple_view, name='simple'),
+    url(r'^hilbert/test/simple/(\d+)/$', simple_view, name='simple-args'),
+    url(r'^hilbert/test/simple/(?P<foo>\w+)/$', simple_view, name='simple-kwargs'),
     url(r'^hilbert/test/secure/$', secure_view),
     url(r'^$', simple_view),
 )

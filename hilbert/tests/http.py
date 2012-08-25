@@ -7,11 +7,6 @@ from django.utils import simplejson
 from hilbert.tests.base import HilbertBaseTestCase
 
 
-__all__ = (
-    'JsonResponseTestCase',
-)
-
-
 class JsonResponseTestCase(HilbertBaseTestCase):
 
     def setUp(self):
