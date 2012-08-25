@@ -6,7 +6,7 @@ Change Log
 v0.4.2
 -----------------------------------
 
-- Fixed bug in ``reverse`` call using :ref:`ViewTestMixin`
+- Fixed bug in ``reverse`` call using :ref:`ViewTestMixin` (Thanks kmtracey)
 
 .. _v0.4.1:
 
