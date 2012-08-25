@@ -136,8 +136,8 @@ class ViewTestMixin(object):
 
     def setUp(self):
         super(ViewTestMixin, self).setUp()
-        name, arg, kwargs = self.get_url()
-        self.url = reverse(name, *arg, **kwargs)
+        name, args, kwargs = self.get_url()
+        self.url = reverse(name, args=args, kwargs=kwargs)
 
     def get_url(self):
         name = self.__class__.url_name
