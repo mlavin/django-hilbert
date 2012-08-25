@@ -1,6 +1,14 @@
 Change Log
 ======================================
 
+.. _v0.5.0:
+
+v0.5.0
+-----------------------------------
+
+- **BACKWARDS INCOMPATIBLE** :ref:`ViewTestMixin` url is now property
+
+
 .. _v0.4.2:
 
 v0.4.2
