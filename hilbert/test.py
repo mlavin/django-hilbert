@@ -134,16 +134,13 @@ class CoverageRunner(DjangoTestSuiteRunner):
 class ViewTestMixin(object):
     url_name = ''
 
-    def setUp(self):
-        super(ViewTestMixin, self).setUp()
-        name, args, kwargs = self.get_url()
-        self.url = reverse(name, args=args, kwargs=kwargs)
-
-    def get_url(self):
+    @property
+    def url(self):
+        "Reversed url to test."
         name = self.__class__.url_name
         args = self.get_url_args()
         kwargs = self.get_url_kwargs()
-        return (name, args, kwargs)
+        return reverse(name, args=args, kwargs=kwargs)
 
     def get_url_args(self):
         return ()
