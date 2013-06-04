@@ -1,7 +1,7 @@
 import re
 
 from django.conf import settings
-from django.http import HttpResponsePermanentRedirect, get_host
+from django.http import HttpResponsePermanentRedirect
 
 
 __all__ = (
@@ -15,7 +15,7 @@ SSL = 'SSL'
 
 def _redirect(request, secure):
     protocol = secure and "https" or "http"
-    newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
+    newurl = "%s://%s%s" % (protocol, request.get_host(), request.get_full_path())
     if getattr(settings, 'SSL_ENABLED', False):
         if settings.DEBUG and request.method == 'POST':
             raise RuntimeError("Django can't perform a redirect while maintaining POST data.")
@@ -43,7 +43,7 @@ class SSLRedirectMiddleware(object):
         else:
             if secure:
                return _redirect(request, True) 
-   
+
     def process_view(self, request, view_func, view_args, view_kwargs):
         # Check kwargs
         if SSL in view_kwargs:
@@ -58,7 +58,7 @@ class SSLRedirectMiddleware(object):
                     return _redirect(request, False)
         else:
             if secure:
-               return _redirect(request, True)               
+                return _redirect(request, True)
 
 
 class SSLUserMiddleware(object):
