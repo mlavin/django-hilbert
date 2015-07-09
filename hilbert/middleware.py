@@ -15,7 +15,7 @@ SSL = 'SSL'
 
 def _redirect(request, secure):
     protocol = secure and "https" or "http"
-    newurl = "%s://%s%s" % (protocol, get_host(request), request.get_full_path())
+    newurl = "%s://%s%s" % (protocol, request.get_host(), request.get_full_path())
     if getattr(settings, 'SSL_ENABLED', False):
         if settings.DEBUG and request.method == 'POST':
             raise RuntimeError("Django can't perform a redirect while maintaining POST data.")
